@@ -25,6 +25,12 @@ void GSIntro::Init()
 	m_logo = std::make_shared<Sprite2D>(model, shader, texture);
 	m_logo->Set2DPosition(screenWidth / 2, screenHeight / 2);
 	m_logo->SetSize(150, 150);
+
+	//text game title
+	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
+	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
+	m_Text_gameName = std::make_shared< Text>(shader, font, "Nguyen Khac Thanh", TEXT_COLOR::GREEN, 1.0);
+	m_Text_gameName->Set2DPosition(Vector2(screenWidth / 2 - 120, 120));
 }
 
 void GSIntro::Exit()
@@ -72,4 +78,5 @@ void GSIntro::Update(float deltaTime)
 void GSIntro::Draw()
 {
 	m_logo->Draw();
+	m_Text_gameName->Draw();
 }

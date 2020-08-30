@@ -1,4 +1,3 @@
-
 #include "GSOption.h"
 
 #include "Shaders.h"
@@ -39,9 +38,8 @@ void GSOption::Init()
 	//text game title
 	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
 	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
-	m_score = std::make_shared< Text>(shader, font, "Set Option", TEXT_COLOR::RED, 1.0);
+	m_score = std::make_shared< Text>(shader, font, "Nguyen khac thanh la tac gia \n \n \n", TEXT_COLOR::RED, 1.0);
 	m_score->Set2DPosition(Vector2(5, 25));
-
 }
 
 void GSOption::Exit()
@@ -68,11 +66,22 @@ void GSOption::HandleEvents()
 
 void GSOption::HandleKeyEvents(int key, bool bIsPressed)
 {
-
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	//text game title
+	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
+	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
+	m_score = std::make_shared< Text>(shader, font, "bat su kien HandleKeyEvents", TEXT_COLOR::RED, 1.0);
+	m_score->Set2DPosition(Vector2(100, 100));
 }
 
 void GSOption::HandleTouchEvents(int x, int y, bool bIsPressed)
 {
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+	//text game title
+	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
+	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
+	m_score = std::make_shared< Text>(shader, font, "bat su kien HandleTouchEvents", TEXT_COLOR::RED, 1.0);
+	m_score->Set2DPosition(Vector2(100, 200));
 }
 
 void GSOption::Update(float deltaTime)

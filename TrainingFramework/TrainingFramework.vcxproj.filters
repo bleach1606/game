@@ -69,7 +69,7 @@
     <ClCompile Include="src\GameObject\GameButton.cpp">
       <Filter>TrainingFramework\src\GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="GSOption.cpp">
+    <ClCompile Include="src\GameStates\GSOption.cpp">
       <Filter>TrainingFramework\src\GameStates</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClInclude Include="src\GameObject\GameButton.h">
       <Filter>TrainingFramework\src\GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="GSOption.h">
+    <ClInclude Include="src\GameStates\GSOption.h">
       <Filter>TrainingFramework\src\GameStates</Filter>
     </ClInclude>
   </ItemGroup>

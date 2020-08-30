@@ -1,5 +1,6 @@
 #pragma once
-#include "GameStates/GameStatebase.h"
+#include "gamestatebase.h"
+
 
 class Sprite2D;
 class Sprite3D;
