@@ -1,0 +1,9 @@
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/package.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/freetype.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/package_source.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/dist.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/install/local.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/install.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/edit_cache.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/rebuild_cache.dir
+C:/Users/Bleach/Desktop/Programming_lesson_06/freetype/out/build/x64-Debug (default)/CMakeFiles/list_install_components.dir
