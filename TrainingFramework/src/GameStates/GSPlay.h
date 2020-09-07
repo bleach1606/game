@@ -1,6 +1,6 @@
 #pragma once
 #include "gamestatebase.h"
-
+#include "Bullet.h"
 
 class Sprite2D;
 class Sprite3D;
@@ -46,5 +46,6 @@ private:
 	std::shared_ptr<Sprite2D> m_BackGround;
 	std::shared_ptr<Text>  m_score;
 	std::shared_ptr<Sprite2D> m_tank, m_Weapon;
+	std::list<std::shared_ptr<Bullet>> lst_bullet;
 };
 

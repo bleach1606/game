@@ -108,6 +108,7 @@ void GSPlay::HandleEvents()
 
 void GSPlay::HandleKeyEvents(int key, bool bIsPressed)
 {
+
 	if (bIsPressed)
 	{
 		if (key == 'W' || key == 'w' || key == 'S' || key == 's')
@@ -134,10 +135,45 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)
 				direction = Direction_D;
 			}
 		}
+		else if (key == 32)
+		{
+			auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+			auto texture = ResourceManagers::GetInstance()->GetTexture("bullet");
+			auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+			std::shared_ptr<Bullet> bullet = std::make_shared<Bullet>(model, shader, texture);
+			bullet->SetAx(ax);
+			bullet->SetAy(ay);
+			bullet->SetDirectionk(direction);
+			switch (bullet->getDirectionk())
+			{
+			case Direction_A:
+				bullet->SetAx(bullet->GetAx() - 50);
+				break;
+			case Direction_D:
+				bullet->SetAx(bullet->GetAx() + 50);
+				break;
+			case Direction_W:
+				bullet->SetAx(bullet->GetAy() - 50);
+				break;
+			case Direction_S:
+				bullet->SetAx(bullet->GetAy() + 50);
+				break;
+			default:
+				break;
+			}
+			bullet->Set2DPosition(bullet->GetAx(), bullet->GetAy());
+			bullet->SetSize(128, 128);
+			bullet->Draw();
+			lst_bullet.push_back(bullet);
+		}
 	}
 	else
 	{
-		direction = Direction_Stop;
+		if (key == 'W' || key == 'w' || key == 'S' || key == 's' || key == 'A' || key == 'a' || key == 'D' || key == 'd') 
+		{
+			direction = Direction_Stop;
+		}
+
 	}
 	
 }
@@ -158,35 +194,65 @@ void GSPlay::Update(float deltaTime)
 			case Direction_A:
 				ax -= 10;
 				if (ax < 0 ) ax = 0;
+				m_Weapon->Set2DPosition(ax-20, ay);
 				break;
 			case Direction_D:
 				ax += 10;
 				if (ax >  750) ax = 750;
+				m_Weapon->Set2DPosition(ax + 20, ay);
 				break;
 			case Direction_W:
 				ay -= 10;
 				if (ay < 0) ay = 0;
+				m_Weapon->Set2DPosition(ax, ay - 20);
 				break;
 			case Direction_S:
 				ay += 10;
 				if (ay > 750) ay = 750;
+				m_Weapon->Set2DPosition(ax, ay + 20);
 				break;
 			default:
 				break;
 		}
-	}
 
-	m_tank->Set2DPosition(ax, ay);
-	m_tank->Draw();
-	m_Weapon->Draw();
+		for each (std::shared_ptr<Bullet> bullet in lst_bullet)
+		{
+			switch (bullet->getDirectionk())
+			{
+			case Direction_A:
+				bullet->SetAx(bullet->GetAx() - 40);
+				break;
+			case Direction_D:
+				bullet->SetAx(bullet->GetAx() + 40);
+				break;
+			case Direction_W:
+				bullet->SetAx(bullet->GetAy() - 40);
+				break;
+			case Direction_S:
+				bullet->SetAx(bullet->GetAy() + 40);
+				break;
+			default:
+				break;
+			}
+			if ( 0 > bullet->GetAx() || bullet->GetAx() > 800 || 0 > bullet->GetAy() || bullet->GetAy() > 800)
+			{
+				//lst_bullet.erase()
+			}
+			bullet->Set2DPosition(bullet->GetAx(), bullet->GetAy());
+			bullet->Draw();
+		}
+		
+	}
 }
 
 void GSPlay::Draw()
 {
 	m_BackGround->Draw();
-	m_score->Draw();
 	m_tank->Draw();
 	m_Weapon->Draw();
+	for each (std::shared_ptr<Bullet> bullet in lst_bullet) {
+		bullet->Draw();
+	}
 }
 
 void GSPlay::SetNewPostionForBullet()
