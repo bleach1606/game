@@ -3,7 +3,7 @@
 #include "Application.h"
 #include "utilities.h" 
 
-GLint screenWidth = 800;
+GLint screenWidth = 1200;
 GLint screenHeight = 800;
 
 
@@ -59,7 +59,7 @@ GLint _tmain(GLint argc, _TCHAR* argv[])
 	CleanUp();
 
 	//identifying memory leaks
-	MemoryDump();
+
 	//printf("Press any key...\n");
 	//_getch();
 
