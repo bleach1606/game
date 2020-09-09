@@ -25,6 +25,14 @@ int Bullet::GetAy() {
 	return ay;
 }
 
+int Bullet::GetType() {
+	return type;
+}
+
+void Bullet::SetType(int t) {
+	this->type = t;
+}
+
 int Bullet::getDirectionk() {
 	return m_directionk;
 }

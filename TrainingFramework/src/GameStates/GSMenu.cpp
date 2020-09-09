@@ -29,7 +29,7 @@ void GSMenu::Init()
 	//play button
 	texture = ResourceManagers::GetInstance()->GetTexture("button_play");
 	std::shared_ptr<GameButton> button = std::make_shared<GameButton>(model, shader, texture);
-	button->Set2DPosition(screenWidth / 2, 200);
+	button->Set2DPosition(screenWidth / 2, 300);
 	button->SetSize(200, 50);
 	button->SetOnClick([]() {
 		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Play);
@@ -39,30 +39,10 @@ void GSMenu::Init()
 	//setting button
 	texture = ResourceManagers::GetInstance()->GetTexture("button_setting");
 	button = std::make_shared<GameButton>(model, shader, texture);
-	button->Set2DPosition(screenWidth / 2, 300);
+	button->Set2DPosition(screenWidth / 2, 450);
 	button->SetSize(200, 50);
 	button->SetOnClick([]() {
 		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Option);
-		});
-	m_listButton.push_back(button);
-
-	// resume - intro button
-	texture = ResourceManagers::GetInstance()->GetTexture("button_resume");
-	button = std::make_shared<GameButton>(model, shader, texture);
-	button->Set2DPosition(screenWidth / 2, 400);
-	button->SetSize(200, 50);
-	button->SetOnClick([]() {
-		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Intro);
-		});
-	m_listButton.push_back(button);
-
-	// HigheScore button todo chua thay anh
-	texture = ResourceManagers::GetInstance()->GetTexture("button_back");
-	button = std::make_shared<GameButton>(model, shader, texture);
-	button->Set2DPosition(screenWidth / 2, 500);
-	button->SetSize(200, 50);
-	button->SetOnClick([]() {
-		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Play);
 		});
 	m_listButton.push_back(button);
 	

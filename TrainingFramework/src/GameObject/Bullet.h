@@ -13,10 +13,12 @@ public:
 	void	SetAy(int y);
 	int		GetAx();
 	int		GetAy();
+	void	SetType(int t);
+	int		GetType();
 	void	SetDirectionk(int k);
 	int		getDirectionk();
 private:
 	void	(*m_pBtClick)();
 	bool	m_isHandle;
-	int		m_directionk, ax, ay;
+	int		m_directionk, ax, ay, type;
 };

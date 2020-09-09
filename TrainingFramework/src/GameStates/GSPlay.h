@@ -17,6 +17,12 @@ enum Direction
 	Direction_D,
 };
 
+enum Bullet_Fly
+{
+	Bullet_Computer = 0,
+	Bullet_Player = 1,
+};
+
 class GSPlay :
 	public GameStateBase
 {
@@ -30,7 +36,7 @@ public:
 	void Pause();
 	void Resume();
 
-	void InitTank(int k, int f);
+	void InitTank(int k);
 
 	void HandleEvents();
 	void HandleKeyEvents(int key, bool bIsPressed);
@@ -48,8 +54,9 @@ private:
 	float currentTime;
 	std::shared_ptr<Sprite2D> m_BackGround;
 	std::shared_ptr<Text>  m_score;
-	std::shared_ptr<Sprite2D> m_tank, m_Weapon;
+	std::shared_ptr<Sprite2D> m_tank;
 	std::list<std::shared_ptr<Bullet>> lst_bullet;
 	std::list<std::shared_ptr<Tank>> lst_tank;
 	std::list<std::shared_ptr<Bum>> lst_bum;
+	std::list<std::shared_ptr<Sprite2D>> lst_wall;
 };
