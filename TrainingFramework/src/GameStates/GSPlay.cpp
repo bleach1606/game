@@ -53,7 +53,7 @@ void GSPlay::Init()
 	direction = Direction_Stop;
 
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
-	auto texture = ResourceManagers::GetInstance()->GetTexture("bg_play");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("map");
 
 	//BackGround
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -63,34 +63,34 @@ void GSPlay::Init()
 
 	// tường
 
-	texture = ResourceManagers::GetInstance()->GetTexture("wall_steel");
-	for (int i = 10; i < 1200; i += 10) {
-		auto wall = std::make_shared<Sprite2D>(model, shader, texture);
-		wall->Set2DPosition(i, 10);
-		wall->SetSize(10, 10);
-		lst_wall.push_back(wall);
+	//texture = ResourceManagers::GetInstance()->GetTexture("wall_steel");
+	//for (int i = 10; i < 1200; i += 10) {
+	//	auto wall = std::make_shared<Sprite2D>(model, shader, texture);
+	//	wall->Set2DPosition(i, 10);
+	//	wall->SetSize(10, 10);
+	//	lst_wall.push_back(wall);
 
-		auto wall1 = std::make_shared<Sprite2D>(model, shader, texture);
-		wall1->Set2DPosition(i, 790);
-		wall1->SetSize(10, 10);
-		lst_wall.push_back(wall1);
-	}
-	for (int i = 10; i < 800; i += 10) {
-		auto wall = std::make_shared<Sprite2D>(model, shader, texture);
-		wall->Set2DPosition(10, i);
-		wall->SetSize(10, 10);
-		lst_wall.push_back(wall);
+	//	auto wall1 = std::make_shared<Sprite2D>(model, shader, texture);
+	//	wall1->Set2DPosition(i, 790);
+	//	wall1->SetSize(10, 10);
+	//	lst_wall.push_back(wall1);
+	//}
+	//for (int i = 10; i < 800; i += 10) {
+	//	auto wall = std::make_shared<Sprite2D>(model, shader, texture);
+	//	wall->Set2DPosition(10, i);
+	//	wall->SetSize(10, 10);
+	//	lst_wall.push_back(wall);
 
-		auto wall1 = std::make_shared<Sprite2D>(model, shader, texture);
-		wall1->Set2DPosition(790, i);
-		wall1->SetSize(10, 10);
-		lst_wall.push_back(wall1);
+	//	auto wall1 = std::make_shared<Sprite2D>(model, shader, texture);
+	//	wall1->Set2DPosition(790, i);
+	//	wall1->SetSize(10, 10);
+	//	lst_wall.push_back(wall1);
 
-		auto wall2 = std::make_shared<Sprite2D>(model, shader, texture);
-		wall2->Set2DPosition(1190, i);
-		wall2->SetSize(10, 10);
-		lst_wall.push_back(wall2);
-	}
+	//	auto wall2 = std::make_shared<Sprite2D>(model, shader, texture);
+	//	wall2->Set2DPosition(1190, i);
+	//	wall2->SetSize(10, 10);
+	//	lst_wall.push_back(wall2);
+	//}
 
 	////text game title
 	//shader = ResourceManagers::GetInstance()->GetShader("TextShader");
