@@ -7,6 +7,9 @@
 #include "Sprite2D.h"
 #include "Sprite3D.h"
 #include "Text.h"
+#include <fstream>
+#include <iostream>
+
 
 extern int screenWidth; //need get on Graphic engine
 extern int screenHeight; //need get on Graphic engine
@@ -45,9 +48,25 @@ void GSPlay::SetDirectionTank() {
 
 void GSPlay::Init()
 {
-	for (int i = 0; i < 20; i++)
-		for (int j = 0; j < 20; j++)
-			mp[i][j] = 0;
+
+	m_IsPause = 0; m_isDie = 0;
+	// Initialize SoLoud (automatic back-end selection)
+	soloud.init();
+
+	sample.load("..\\nhac_nen.wav"); // Load a wave file
+	soloud.play(sample);
+
+	std::ifstream infile;
+	infile.open("..\\output.txt");
+	ax = ay = 0;
+	for (int i = 0; i < 20; i++) {
+		for (int j = 0; j < 20; j++) {
+			int x; infile >> x;
+			mp[i][j] = x;
+		}
+	}
+	infile.close();
+
 	ax = ay = 400;
 	currentTime = 0.0f;
 	direction = Direction_Stop;
@@ -63,42 +82,27 @@ void GSPlay::Init()
 
 	// tường
 
-	//texture = ResourceManagers::GetInstance()->GetTexture("wall_steel");
-	//for (int i = 10; i < 1200; i += 10) {
-	//	auto wall = std::make_shared<Sprite2D>(model, shader, texture);
-	//	wall->Set2DPosition(i, 10);
-	//	wall->SetSize(10, 10);
-	//	lst_wall.push_back(wall);
-
-	//	auto wall1 = std::make_shared<Sprite2D>(model, shader, texture);
-	//	wall1->Set2DPosition(i, 790);
-	//	wall1->SetSize(10, 10);
-	//	lst_wall.push_back(wall1);
-	//}
-	//for (int i = 10; i < 800; i += 10) {
-	//	auto wall = std::make_shared<Sprite2D>(model, shader, texture);
-	//	wall->Set2DPosition(10, i);
-	//	wall->SetSize(10, 10);
-	//	lst_wall.push_back(wall);
-
-	//	auto wall1 = std::make_shared<Sprite2D>(model, shader, texture);
-	//	wall1->Set2DPosition(790, i);
-	//	wall1->SetSize(10, 10);
-	//	lst_wall.push_back(wall1);
-
-	//	auto wall2 = std::make_shared<Sprite2D>(model, shader, texture);
-	//	wall2->Set2DPosition(1190, i);
-	//	wall2->SetSize(10, 10);
-	//	lst_wall.push_back(wall2);
-	//}
-
-	////text game title
-	//shader = ResourceManagers::GetInstance()->GetShader("TextShader");
-	//std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
-	//m_score = std::make_shared< Text>(shader, font, "score: 10", TEXT_COLOR::RED, 1.0);
-	//m_score->Set2DPosition(Vector2(5, 25));
-
-
+	
+	for (int i = 1; i < 19; i++) {
+		for (int j = 1; j < 19; j++) {
+			if (mp[i][j] == 2) {
+				texture = ResourceManagers::GetInstance()->GetTexture("trees");
+				auto wall = std::make_shared<Sprite2D>(model, shader, texture);
+				wall->Set2DPosition(i*40, j*40);
+				wall->SetSize(40, 40);
+				lst_wall.push_back(wall);
+			} 
+			else if (mp[i][j] == 1) {
+				texture = ResourceManagers::GetInstance()->GetTexture("gach");
+				auto wall = std::make_shared<Sprite2D>(model, shader, texture);
+				wall->Set2DPosition(i * 40, j * 40);
+				wall->SetSize(40, 40);
+				lst_wall.push_back(wall);
+			}
+			
+		}
+	}
+	
 	// view tank
 	InitTank(1);
 
@@ -121,17 +125,90 @@ void GSPlay::Exit()
 
 }
 
-
 void GSPlay::Pause()
 {
+	//todo pause
+	int k = 1;
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("xxx");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 
+	//resume button
+	texture = ResourceManagers::GetInstance()->GetTexture("button_resume");
+	std::shared_ptr<GameButton> button = std::make_shared<GameButton>(model, shader, texture);
+	button->Set2DPosition(screenWidth / 2, 300);
+	button->SetSize(200, 50);
+	button->SetOnClick([]() {
+		
+		});
+	m_listButton.push_back(button);
+
+	//exit button
+	texture = ResourceManagers::GetInstance()->GetTexture("button_quit");
+	button = std::make_shared<GameButton>(model, shader, texture);
+	button->Set2DPosition(screenWidth / 2, 500);
+	button->SetSize(200, 50);
+	button->SetOnClick([]() {
+		exit(0);
+		});
+	m_listButton.push_back(button);
+
+
+	for each (std::shared_ptr<GameButton> button in m_listButton) {
+		button->Draw();
+	}
 }
+
+void GSPlay::EndGame()
+{
+	//todo pause
+	int k = 1;
+	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
+	auto texture = ResourceManagers::GetInstance()->GetTexture("xxx");
+	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
+
+	//resume button
+	texture = ResourceManagers::GetInstance()->GetTexture("button_play");
+	std::shared_ptr<GameButton> button = std::make_shared<GameButton>(model, shader, texture);
+	button->Set2DPosition(screenWidth / 2, 300);
+	button->SetSize(200, 50);
+	button->SetOnClick([]() {
+		
+		});
+	m_listButton.push_back(button);
+
+	//resume button
+	texture = ResourceManagers::GetInstance()->GetTexture("button_back");
+	std::shared_ptr<GameButton> button = std::make_shared<GameButton>(model, shader, texture);
+	button->Set2DPosition(screenWidth / 2, 450);
+	button->SetSize(200, 50);
+	button->SetOnClick([]() {
+		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Menu);
+		});
+	m_listButton.push_back(button);
+
+	//exit button
+	texture = ResourceManagers::GetInstance()->GetTexture("button_quit");
+	button = std::make_shared<GameButton>(model, shader, texture);
+	button->Set2DPosition(screenWidth / 2, 600);
+	button->SetSize(200, 50);
+	button->SetOnClick([]() {
+		exit(0);
+		});
+	m_listButton.push_back(button);
+
+
+	for each (std::shared_ptr<GameButton> button in m_listButton) {
+		button->Draw();
+	}
+}
+
 
 void GSPlay::Resume()
 {
-
+	m_listButton.clear();
+	m_IsPause = 0;
 }
-
 
 void GSPlay::HandleEvents()
 {
@@ -140,9 +217,18 @@ void GSPlay::HandleEvents()
 
 void GSPlay::HandleKeyEvents(int key, bool bIsPressed)
 {
+	if (m_isDie || m_IsPause )
+	{
+		return;
+	}
 
 	if (bIsPressed)
 	{
+		if (key == 27)
+		{
+			m_IsPause = 1;
+			this->Pause();
+		}
 		if (key == 'W' || key == 'w' || key == 'S' || key == 's')
 		{
 			
@@ -214,10 +300,70 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)
 
 void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)
 {
+	if (m_IsPause) {
+		if ( (300 < x && x < 600) && ( 200< y && y < 400))
+		{
+			this->Resume();
+		}
+	}
+	else if (m_IsPause) {
+		if ((300 < x && x < 600) && (200 < y && y < 400))
+		{
+			this->Init();
+		}
+	}
+}
+
+bool IsCheckWall(int mp[100][100], int x, int y, int k) {
+	x = x / 40; y = y / 40;
+	bool kq = true;
+	switch (k)
+	{
+	case Direction_A:
+		if (mp[x - 1][y] == 1)
+		{
+			kq = false;
+		}
+		break;
+	case Direction_D:
+		if (mp[x + 1][y] == 1)
+		{
+			kq = false;
+		}
+		break;
+	case Direction_W:
+		if (mp[x][y-1] == 1)
+		{
+			kq = false;
+		}
+		break;
+	case Direction_S:
+		if (mp[x][y + 1] == 1)
+		{
+			kq = false;
+		}
+		break;
+	default:
+		break;
+	}
+	return kq;
+}
+
+int IsDie(int ax, int ay, int x, int y, int k) {
+	int ok = 0;
+	if ((x - ax) * (x - ax) + (y - ay) * (y - ay) < (k + 32) * (k + 32)) {
+		ok = 1;
+	}
+	return ok;
 }
 
 void GSPlay::Update(float deltaTime)
 {
+	if (m_isDie || m_IsPause)
+	{
+		return;
+	}
+	if (deltaTime <= 0) return;
 	currentTime += deltaTime;
 	if (currentTime > 0.06f)
 	{
@@ -225,20 +371,32 @@ void GSPlay::Update(float deltaTime)
 		switch (direction)
 		{
 			case Direction_A:
-				ax -= 10;
-				if (ax < 50) ax = 50;
+				if (IsCheckWall(mp, ax, ay, direction))
+				{
+					ax -= 10;
+					if (ax < 50) ax = 50;
+				}
 				break;
 			case Direction_D:
-				ax += 10;
-				if (ax >  750) ax = 750;
+				if (IsCheckWall(mp, ax, ay, direction))
+				{
+					ax += 10;
+					if (ax > 750) ax = 750;
+				}
 				break;
 			case Direction_W:
-				ay -= 10;
-				if (ay < 50) ay = 50;
+				if (IsCheckWall(mp, ax, ay, direction))
+				{
+					ay -= 10;
+					if (ay < 50) ay = 50;
+				}
 				break;
 			case Direction_S:
-				ay += 10;
-				if (ay > 750) ay = 750;
+				if (IsCheckWall(mp, ax, ay, direction))
+				{
+					ay += 10;
+					if (ay > 750) ay = 750;
+				}
 				break;
 			default:
 				break;
@@ -285,13 +443,19 @@ void GSPlay::Update(float deltaTime)
 			default:
 				break;
 			}
-			if ( 30 > bullet->GetAx() || bullet->GetAx() > 780 || 30 > bullet->GetAy() || bullet->GetAy() > 780)
+			if ( 30 > bullet->GetAx() || bullet->GetAx() > 780 || 30 > bullet->GetAy() || bullet->GetAy() > 780 
+				|| !IsCheckWall(mp, bullet->GetAx(), bullet->GetAy(), bullet->getDirectionk()))
 			{
 				//lst_bullet.erase()
 				//bullet->~Bullet();
 			}
 			else {
 				if (bullet->GetType() == Bullet_Computer) {
+					if(IsDie(ax, ay, bullet->GetAx(), bullet->GetAy(), 10)) 
+					{
+						m_isDie = 1;
+						this->EndGame();
+					}
 					temp.push_back(bullet); 
 				}
 				else {
@@ -320,6 +484,7 @@ void GSPlay::Update(float deltaTime)
 					}
 					lst_tank.clear();
 					lst_tank = tankss;
+
 					if (!ok) temp.push_back(bullet);
 				}
 				
@@ -334,27 +499,31 @@ void GSPlay::Update(float deltaTime)
 		// xử lý sự kiện tank computer
 		for each (std::shared_ptr<Tank> tank in lst_tank) {
 			tank->RandomDir();
-			switch (tank->getDirectionk())
+			if (IsCheckWall(mp, tank->GetAx(), tank->GetAy(), tank->getDirectionk()))
 			{
-			case Direction_A:
-				tank->SetAx(tank->GetAx() - 10);
-				if (tank->GetAx() < 50) tank->SetAx(50);
-				break;
-			case Direction_D:
-				tank->SetAx(tank->GetAx() + 10);
-				if ((tank->GetAx() > 700)) tank->SetAx(700);
-				break;
-			case Direction_W:
-				tank->SetAy(tank->GetAy() - 10);
-				if (tank->GetAy() < 50) tank->SetAy(50);
-				break;
-			case Direction_S:
-				tank->SetAy(tank->GetAy() + 10);
-				if (tank->GetAy() > 700) tank->SetAy(700);
-				break;
-			default:
-				break;
+				switch (tank->getDirectionk())
+				{
+				case Direction_A:
+					tank->SetAx(tank->GetAx() - 10);
+					if (tank->GetAx() < 50) tank->SetAx(50);
+					break;
+				case Direction_D:
+					tank->SetAx(tank->GetAx() + 10);
+					if ((tank->GetAx() > 700)) tank->SetAx(700);
+					break;
+				case Direction_W:
+					tank->SetAy(tank->GetAy() - 10);
+					if (tank->GetAy() < 50) tank->SetAy(50);
+					break;
+				case Direction_S:
+					tank->SetAy(tank->GetAy() + 10);
+					if (tank->GetAy() > 700) tank->SetAy(700);
+					break;
+				default:
+					break;
+				}
 			}
+			
 			tank->Set2DPosition(tank->GetAx(), tank->GetAy());
 			
 			// xự kiện tank_computer bắn đạn
@@ -396,7 +565,6 @@ void GSPlay::Update(float deltaTime)
 	}
 }
 
-
 void GSPlay::Draw()
 {
 	m_BackGround->Draw();
@@ -416,6 +584,7 @@ void GSPlay::Draw()
 	for each (std::shared_ptr<Sprite2D> wall in lst_wall) {
 		wall->Draw();
 	}
+
 }
 
 void GSPlay::SetNewPostionForBullet()

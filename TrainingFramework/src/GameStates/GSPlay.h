@@ -3,6 +3,9 @@
 #include "Bullet.h"
 #include "Tank.h"
 #include "Bum.h"
+#include "soloud.h"
+#include "soloud_wav.h"
+#include "GameButton.h"
 
 class Sprite2D;
 class Sprite3D;
@@ -35,6 +38,7 @@ public:
 
 	void Pause();
 	void Resume();
+	void EndGame();
 
 	void InitTank(int k);
 
@@ -46,11 +50,11 @@ public:
 	void Draw();
 	void SetDirectionTank();
 
-	
+
 	void SetNewPostionForBullet();
 
 private:
-	int mp[20][20], ax, ay, direction, old_direction;
+	int mp[100][100], ax, ay, direction, old_direction, m_isDie, m_IsPause;
 	float currentTime;
 	std::shared_ptr<Sprite2D> m_BackGround;
 	std::shared_ptr<Text>  m_score;
@@ -59,4 +63,8 @@ private:
 	std::list<std::shared_ptr<Tank>> lst_tank;
 	std::list<std::shared_ptr<Bum>> lst_bum;
 	std::list<std::shared_ptr<Sprite2D>> lst_wall;
+	std::list<std::shared_ptr<GameButton>>	m_listButton;
+	SoLoud::Soloud soloud; // Engine core
+	SoLoud::Wav sample;    // One sample
+
 };
