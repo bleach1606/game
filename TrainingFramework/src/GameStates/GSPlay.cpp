@@ -53,11 +53,11 @@ void GSPlay::Init()
 	// Initialize SoLoud (automatic back-end selection)
 	soloud.init();
 
-	sample.load("..\\nhac_nen.wav"); // Load a wave file
+	sample.load("C:\\Users\\Bleach\\Desktop\\Programming_lesson_06\\nhac_nen.wav"); // Load a wave file
 	soloud.play(sample);
 
 	std::ifstream infile;
-	infile.open("..\\output.txt");
+	infile.open("C:\\Users\\Bleach\\Desktop\\Programming_lesson_06\\\output.txt");
 	ax = ay = 0;
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 20; j++) {
@@ -67,7 +67,7 @@ void GSPlay::Init()
 	}
 	infile.close();
 
-	ax = ay = 400;
+	ax = 50; ay = 600;
 	currentTime = 0.0f;
 	direction = Direction_Stop;
 
@@ -111,8 +111,8 @@ void GSPlay::Init()
 		auto texture = ResourceManagers::GetInstance()->GetTexture("Tank_1_A");
 		auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
 		std::shared_ptr<Tank> tank = std::make_shared<Tank>(model, shader, texture);
-		tank->SetAx(ax + (i + 2) *40);
-		tank->SetAy(ay - (i + 2) *40);
+		tank->SetAx(400 + (i + 2) *40);
+		tank->SetAy(400 - (i + 2) *40);
 		tank->SetDirectionk(direction);
 		tank->Set2DPosition(tank->GetAx(), tank->GetAy());
 		tank->SetSize(64, 64);
@@ -173,13 +173,13 @@ void GSPlay::EndGame()
 	button->Set2DPosition(screenWidth / 2, 300);
 	button->SetSize(200, 50);
 	button->SetOnClick([]() {
-		
+		GameStateMachine::GetInstance()->ChangeState(StateTypes::STATE_Play);
 		});
 	m_listButton.push_back(button);
 
 	//resume button
 	texture = ResourceManagers::GetInstance()->GetTexture("button_back");
-	std::shared_ptr<GameButton> button = std::make_shared<GameButton>(model, shader, texture);
+	button = std::make_shared<GameButton>(model, shader, texture);
 	button->Set2DPosition(screenWidth / 2, 450);
 	button->SetSize(200, 50);
 	button->SetOnClick([]() {
@@ -198,11 +198,8 @@ void GSPlay::EndGame()
 	m_listButton.push_back(button);
 
 
-	for each (std::shared_ptr<GameButton> button in m_listButton) {
-		button->Draw();
-	}
+	
 }
-
 
 void GSPlay::Resume()
 {
@@ -300,6 +297,11 @@ void GSPlay::HandleKeyEvents(int key, bool bIsPressed)
 
 void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)
 {
+	for (auto it : m_listButton)
+	{
+		(it)->HandleTouchEvents(x, y, bIsPressed);
+		if ((it)->IsHandle()) break;
+	}
 	if (m_IsPause) {
 		if ( (300 < x && x < 600) && ( 200< y && y < 400))
 		{
@@ -312,6 +314,7 @@ void GSPlay::HandleTouchEvents(int x, int y, bool bIsPressed)
 			this->Init();
 		}
 	}
+
 }
 
 bool IsCheckWall(int mp[100][100], int x, int y, int k) {
@@ -525,7 +528,11 @@ void GSPlay::Update(float deltaTime)
 			}
 			
 			tank->Set2DPosition(tank->GetAx(), tank->GetAy());
-			
+			if (IsDie(ax, ay, tank->GetAx(), tank->GetAy(), 20))
+			{
+				m_isDie = 1;
+				this->EndGame();
+			}
 			// xự kiện tank_computer bắn đạn
 			if (rand() % 10 == 0) {
 				auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
@@ -583,6 +590,10 @@ void GSPlay::Draw()
 
 	for each (std::shared_ptr<Sprite2D> wall in lst_wall) {
 		wall->Draw();
+	}
+
+	for each (std::shared_ptr<GameButton> button in m_listButton) {
+		button->Draw();
 	}
 
 }
