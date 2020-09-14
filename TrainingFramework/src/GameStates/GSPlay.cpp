@@ -199,11 +199,15 @@ void GSPlay::EndGame(int k)
 		});
 	m_listButton.push_back(button);
 
-	//text game title
-	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
-	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
-	m_Text_gameName = std::make_shared< Text>(shader, font, "YOU WIN !!!", TEXT_COLOR::GREEN, 1.0);
-	m_Text_gameName->Set2DPosition(Vector2(screenWidth / 2 - 120, 120));
+	if (k)
+	{
+		//text game title
+		shader = ResourceManagers::GetInstance()->GetShader("TextShader");
+		std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
+		m_Text_gameName = std::make_shared< Text>(shader, font, "YOU WIN !!!", TEXT_COLOR::GREEN, 1.0);
+		m_Text_gameName->Set2DPosition(Vector2(screenWidth / 2 - 120, 120));
+		m_Text_gameName->Draw();
+	}
 	
 }
 
@@ -587,7 +591,7 @@ void GSPlay::Draw()
 {
 	m_BackGround->Draw();
 	m_tank->Draw();
-	m_Text_gameName->Draw();
+	
 
 	for each (std::shared_ptr<Bullet> bullet in lst_bullet) {
 		bullet->Draw();
