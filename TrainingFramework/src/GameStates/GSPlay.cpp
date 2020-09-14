@@ -53,11 +53,12 @@ void GSPlay::Init()
 	// Initialize SoLoud (automatic back-end selection)
 	soloud.init();
 
-	sample.load("C:\\Users\\Bleach\\Desktop\\Programming_lesson_06\\nhac_nen.wav"); // Load a wave file
+	sample.load("..\\nhac_nen.wav"); // Load a wave file
 	soloud.play(sample);
 
 	std::ifstream infile;
-	infile.open("C:\\Users\\Bleach\\Desktop\\Programming_lesson_06\\\output.txt");
+//C:\\Users\\Bleach\\Desktop\\Programming_lesson_06
+	infile.open("..\\output.txt");
 	ax = ay = 0;
 	for (int i = 0; i < 20; i++) {
 		for (int j = 0; j < 20; j++) {
@@ -159,10 +160,11 @@ void GSPlay::Pause()
 	}
 }
 
-void GSPlay::EndGame()
+void GSPlay::EndGame(int k)
 {
+	
+
 	//todo pause
-	int k = 1;
 	auto model = ResourceManagers::GetInstance()->GetModel("Sprite2D");
 	auto texture = ResourceManagers::GetInstance()->GetTexture("xxx");
 	auto shader = ResourceManagers::GetInstance()->GetShader("TextureShader");
@@ -197,7 +199,11 @@ void GSPlay::EndGame()
 		});
 	m_listButton.push_back(button);
 
-
+	//text game title
+	shader = ResourceManagers::GetInstance()->GetShader("TextShader");
+	std::shared_ptr<Font> font = ResourceManagers::GetInstance()->GetFont("arialbd");
+	m_Text_gameName = std::make_shared< Text>(shader, font, "YOU WIN !!!", TEXT_COLOR::GREEN, 1.0);
+	m_Text_gameName->Set2DPosition(Vector2(screenWidth / 2 - 120, 120));
 	
 }
 
@@ -366,6 +372,11 @@ void GSPlay::Update(float deltaTime)
 	{
 		return;
 	}
+	if (!lst_tank.size())
+	{
+		EndGame(1);
+		return;
+	}
 	if (deltaTime <= 0) return;
 	currentTime += deltaTime;
 	if (currentTime > 0.06f)
@@ -457,7 +468,7 @@ void GSPlay::Update(float deltaTime)
 					if(IsDie(ax, ay, bullet->GetAx(), bullet->GetAy(), 10)) 
 					{
 						m_isDie = 1;
-						this->EndGame();
+						this->EndGame(0);
 					}
 					temp.push_back(bullet); 
 				}
@@ -531,7 +542,7 @@ void GSPlay::Update(float deltaTime)
 			if (IsDie(ax, ay, tank->GetAx(), tank->GetAy(), 20))
 			{
 				m_isDie = 1;
-				this->EndGame();
+				this->EndGame(0);
 			}
 			// xự kiện tank_computer bắn đạn
 			if (rand() % 10 == 0) {
@@ -576,6 +587,8 @@ void GSPlay::Draw()
 {
 	m_BackGround->Draw();
 	m_tank->Draw();
+	m_Text_gameName->Draw();
+
 	for each (std::shared_ptr<Bullet> bullet in lst_bullet) {
 		bullet->Draw();
 	}

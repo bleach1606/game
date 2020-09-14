@@ -38,7 +38,7 @@ public:
 
 	void Pause();
 	void Resume();
-	void EndGame();
+	void EndGame(int k);
 
 	void InitTank(int k);
 
@@ -66,5 +66,5 @@ private:
 	std::list<std::shared_ptr<GameButton>>	m_listButton;
 	SoLoud::Soloud soloud; // Engine core
 	SoLoud::Wav sample;    // One sample
-
+	std::shared_ptr<Text>  m_Text_gameName;
 };
